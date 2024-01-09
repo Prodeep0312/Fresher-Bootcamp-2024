@@ -1,40 +1,19 @@
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 
-std::vector<std::string> searchStartsWith(const std::vector<std::string>& array, const std::string& prefix) {
+std::vector<std::string> searchWithCriteria(const std::vector<std::string>& stringitem, const std::string& criteria, std::function<bool(const std::string&)> predicate) {
     std::vector<std::string> matchingStrings;
-    for (const std::string& str : array) {
-        if (str.find(prefix) == 0) {
+    for (const std::string& str : stringitem) {
+        if (predicate(str)) {
             matchingStrings.push_back(str);
         }
     }
     return matchingStrings;
 }
 
-
-std::vector<std::string> searchEndsWith(const std::vector<std::string>& array, const std::string& suffix) {
-    std::vector<std::string> matchingStrings;
-    for (const std::string& str : array) {
-        if (str.rfind(suffix) == str.length() - suffix.length()) {
-            matchingStrings.push_back(str);
-        }
-    }
-    return matchingStrings;
-}
-
-
-std::vector<std::string> searchByLength(const std::vector<std::string>& array, int length) {
-    std::vector<std::string> matchingStrings;
-    for (const std::string& str : array) {
-        if (str.length() == static_cast<size_t>(length)) {
-            matchingStrings.push_back(str);
-        }
-    }
-    return matchingStrings;
-}
 
 void loopAndSort(const std::vector<std::string>& strings) {
     std::vector<std::string> sortedStrings = strings;
@@ -45,20 +24,22 @@ void loopAndSort(const std::vector<std::string>& strings) {
 }
 
 int main() {
-    
+   
     std::vector<std::string> stringArray = {"apple", "banana", "orange", "avocado", "kiwi"};
 
-  
+   
     std::string startsWithCriteria = "a";
     std::string endsWithCriteria = "o";
     int lengthCriteria = 6;
 
     
-    std::vector<std::string> startsWithResult = searchStartsWith(stringArray, startsWithCriteria);
-    std::vector<std::string> endsWithResult = searchEndsWith(stringArray, endsWithCriteria);
-    std::vector<std::string> lengthResult = searchByLength(stringArray, lengthCriteria);
-
+    auto startsWithResult = searchWithCriteria(stringArray, startsWithCriteria, [](const std::string& str) { return str.find(startsWithCriteria) == 0; });
     
+    auto endsWithResult = searchWithCriteria(stringArray, endsWithCriteria, [](const std::string& str) { return str.rfind(endsWithCriteria) == str.length() - endsWithCriteria.length(); });
+    
+    auto lengthResult = searchWithCriteria(stringArray, "", [lengthCriteria](const std::string& str) { return str.length() == static_cast<size_t>(lengthCriteria); });
+
+   
     std::cout << "Starts with 'a':" << std::endl;
     loopAndSort(startsWithResult);
 
