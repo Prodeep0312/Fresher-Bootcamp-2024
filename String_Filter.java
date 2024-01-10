@@ -1,6 +1,6 @@
 import java.util.*;
 
-class StringFilter {
+/*class StringFilter {
     private final List<String> strings;
 
     public StringFilter(List<String> array) {
@@ -50,5 +50,78 @@ public class Main {
         
         terminalDisplayer.displayOnTerminal(endsWithSorted);
     }
+}*/
+
+
+class ConsoleDisplayController {
+
+	private List<String> context;
+
+	public void setContent(List<String> msg){
+	{
+		this.context=msg;
+
+	}
+
+	public void displayonTerminal(){
+
+		if (context == null) {
+    throw new NullPointerException("stringList must not be null");
+  }
+
+		for (String str : context) {
+           		 System.out.println(str);
+        }
+
+	
+
 }
+
+class StartsWithStratergy {
+	private String startsWithCriteria;
+
+	public void setStartsWith( String key){
+
+		this.startsWithCriteria=key;
+	}
+
+	 public boolean invoke(String item){
+        return item.startsWith(startString);
+    }
+
+
+}
+
+class StringListFilterController{
+
+StartsWithStratergy startsWithStratergy =new StartsWithStratergy();
+
+public List<string> filter( List<string> stringList){
+
+  ArrayList<String> filteredArray = new ArrayList<>();
+        predicate.setStartsWith("o");
+        for(String word: stringList){
+            if(predicate.invoke(word)) filteredArray.add(word);
+        }
+        return filteredArray;
+    }
+
+ 
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> stringArray = List.of("apple", "banana", "orange", "avocado", "kiwi");
+        String startsWithCriteria = "o";
+
+         StringListFilterController stringListFilterControllerObj = new StringListFilterController();
+      ArrayList<String> filteredArray = stringListFilterControllerObj.filter(stringArray);
+      
+      ConsoleDisplayController consoleDisplayControllerObj = new ConsoleDisplayController();
+      consoleDisplayControllerObj.setContent(filteredArray);
+      consoleDisplayControllerObj.displayonTerminal();
+    }
+}
+
 
