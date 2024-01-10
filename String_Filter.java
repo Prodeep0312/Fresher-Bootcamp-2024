@@ -86,7 +86,7 @@ class StartsWithStratergy {
 	}
 
 	 public boolean invoke(String item){
-        return item.startsWith(startString);
+        return item.startsWith(startsWithCriteria);
     }
 
 
