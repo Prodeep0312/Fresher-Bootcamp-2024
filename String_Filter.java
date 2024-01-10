@@ -99,9 +99,9 @@ StartsWithStratergy startsWithStratergy =new StartsWithStratergy();
 public List<string> filter( List<string> stringList){
 
   ArrayList<String> filteredArray = new ArrayList<>();
-        predicate.setStartsWith("o");
+        startsWithStratergy.setStartsWith("o");
         for(String word: stringList){
-            if(predicate.invoke(word)) filteredArray.add(word);
+            if(startsWithStratergy.invoke(word)) filteredArray.add(word);
         }
         return filteredArray;
     }
