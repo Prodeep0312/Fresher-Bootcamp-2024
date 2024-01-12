@@ -1,149 +1,305 @@
+/* OLDER CODE
 
 import java.util.*;
-abstract class DocumentPart
-{
-    String name;
-    String position;
+class WordDocument{
+   List<DocumentPart> parts =new ArrayList<>();
+   
+   public void open(){
+       for(DocumentPart dp :parts)
+       {
+           dp.paint();
+       }
+   }
+   public void save(){
+        for(DocumentPart dp:parts)
+       {
+           dp.save();
+       }
+   }
     
-    public abstract void paint();
-    public abstract void save();
-    public abstract void convert(ConverterInterface iConverter);
+    
 }
 
-class Header extends DocumentPart
-{
+abstract class DocumentPart{
+    String name;
+    double position;
+    abstract void paint();
+    abstract void save();
+}
+
+class Header extends DocumentPart {
+    
     String title;
     
-    public void paint() {
-        System.out.println("painting header");
+    void paint()
+    {
+        System.out.println("Displaying header");
+        
     }
     
-    public void save() {
-        System.out.println("saving header");
-    }
-    
-    public void convert(ConverterInterface iConverter) {
-        iConverter.convert(this);
+     void save()
+    {
+        System.out.println("Saving  header");
+        
     }
 }
 
-class Paragraph extends DocumentPart
-{
-    String content;
-    String lines;
+class Footer extends DocumentPart {
     
-    public void paint() {
-        System.out.println("painting paragraph");
+    String text;
+    
+    void paint()
+    {
+        System.out.println("Displaying Footer");
+        
     }
     
-    public void save() {
-        System.out.println("saving paragraph");
-    }
-    
-    public void convert(ConverterInterface iConverter) {
-        iConverter.convert(this);
+     void save()
+    {
+        System.out.println("Saving  Footer");
+        
     }
 }
 
-class HyperLink extends DocumentPart
-{
+class Hyperlink extends DocumentPart {
+    
     String url;
     String text;
     
-    public void paint() {
-        System.out.println("painting hyperlink");
+    void paint()
+    {
+        System.out.println("Displaying hyperlink");
+        
     }
     
-    public void save() {
-        System.out.println("saving hyperlink");
+     void save()
+    {
+        System.out.println("Saving  hyperlink");
+        
+    }
+}
+
+class Paragraph extends DocumentPart {
+    
+    String content;
+    
+    
+    void paint()
+    {
+        System.out.println("Displaying paragraph");
+        
     }
     
-    public void convert(ConverterInterface iConverter) {
+     void save()
+    {
+        System.out.println("Saving  paragraph");
+        
+    }
+}
+
+class Main{
+    public static void main(String[] args){
+        WordDocument document = new WordDocument();
+
+        
+        Header header = new Header();
+        header.title = "Document Title";
+        document.parts.add(header);
+
+        Paragraph paragraph = new Paragraph();
+        paragraph.content = "This is a sample paragraph.";
+        document.parts.add(paragraph);
+
+        Footer footer = new Footer();
+        footer.text = "Page 1";
+        document.parts.add(footer);
+
+        Hyperlink hyperlink = new Hyperlink();
+        hyperlink.url = "https://example.com";
+        hyperlink.text = "Visit our website";
+        document.parts.add(hyperlink);
+
+        
+        document.open();
+        document.save();
+    }
+}
+
+*/
+import java.util.*;
+class WordDocument{
+   List<DocumentPart> parts =new ArrayList<>();
+   
+   public void open(){
+       for(DocumentPart dp :parts)
+       {
+           dp.paint();
+       }
+   }
+   public void save(){
+        for(DocumentPart dp:parts)
+       {
+           dp.save();
+       }
+   }
+       
+    public void convert(ConvertorInterface iConverter) {
+        for (DocumentPart dp : parts) {
+            dp.convert(iConverter);
+        }
+    }
+   
+    
+    
+}
+
+abstract class DocumentPart{
+    String name;
+    double position;
+    abstract void paint();
+    abstract void save();
+    abstract void convert(ConvertorInterface iConverter);
+}
+
+class HTMLConvertor implements ConvertorInterface
+{
+    public void convert(Header header) {
+        System.out.println("<header> created ... ");
+    }
+    
+    public void convert(Paragraph paragraph) {
+        System.out.println("<p> converted");
+    }
+    
+    public void convert(Hyperlink hyperlink) {
+        System.out.println("<a> converted");
+    }
+    
+    public void convert(Footer footer) {
+        System.out.println("<footer> converted");
+    }
+}
+class Header extends DocumentPart {
+    
+    String title;
+    
+    void paint()
+    {
+        System.out.println("Displaying header");
+        
+    }
+    
+     void save()
+    {
+        System.out.println("Saving  header");
+        
+    }
+    
+     public void convert(ConvertorInterface iConverter) {
         iConverter.convert(this);
     }
 }
 
-class Footer extends DocumentPart
-{
+class Footer extends DocumentPart {
+    
     String text;
     
-    public void paint() {
-        System.out.println("painting footer");
+    void paint()
+    {
+        System.out.println("Displaying Footer");
+        
     }
     
-    public void save() {
-        System.out.println("saving footer");
+     void save()
+    {
+        System.out.println("Saving  Footer");
+        
     }
-    
-    public void convert(ConverterInterface iConverter) {
+     public void convert(ConvertorInterface iConverter) {
         iConverter.convert(this);
     }
 }
 
-class WordDocument
-{
-    DocumentPart[] documentParts;
+class Hyperlink extends DocumentPart {
     
-    WordDocument(DocumentPart[] dP) {
-        documentParts = dP;
+    String url;
+    String text;
+    
+    void paint()
+    {
+        System.out.println("Displaying hyperlink");
         
     }
     
-    public void open() {
-        for (DocumentPart i : documentParts) {
-            i.paint();
-            i.save();
-        }
+     void save()
+    {
+        System.out.println("Saving  hyperlink");
+        
     }
-    
-    public void convert(ConverterInterface iConverter) {
-        for (DocumentPart i : documentParts) {
-            i.convert(iConverter);
-        }
+     public void convert(ConvertorInterface iConverter) {
+        iConverter.convert(this);
     }
 }
 
-interface ConverterInterface
-{
-    public void convert(Header headerItem);
-    public void convert(Paragraph paragraphItem);
-    public void convert(HyperLink hyperlinkItem);
-    public void convert(Footer footerItem);
-}
-
-class HTMLConverter implements ConverterInterface
-{
-    public void convert(Header headerItem) {
-        System.out.println("Converting <header>....");
+class Paragraph extends DocumentPart {
+    
+    String content;
+    
+    
+    void paint()
+    {
+        System.out.println("Displaying paragraph");
+        
     }
     
-    public void convert(Paragraph paragraphItem) {
-        System.out.println("Converting <p> ...");
+     void save()
+    {
+        System.out.println("Saving  paragraph");
+        
     }
     
-    public void convert(HyperLink hyperlinkItem) {
-        System.out.println("Converting <a>...");
-    }
-    
-    public void convert(Footer footerItem) {
-        System.out.println("Converting <footer>...");
+     public void convert(ConvertorInterface iConverter) {
+        iConverter.convert(this);
     }
 }
 
-class Main
+interface ConvertorInterface
 {
-    public static void main(String[] args) {
-        DocumentPart h = new Header();
-        DocumentPart f = new Footer();
-        DocumentPart hyperlink = new HyperLink();
-        DocumentPart p = new Paragraph();
+    public void convert(Header header);
+    public void convert(Paragraph paragraph);
+    public void convert(Hyperlink hyperlink);
+    public void convert(Footer footer);
+}
+
+
+class Main{
+    public static void main(String[] args){
+        WordDocument document = new WordDocument();
+
         
-       
+        Header header = new Header();
+        header.title = "Document Title";
+        document.parts.add(header);
+
+        Paragraph paragraph = new Paragraph();
+        paragraph.content = "This is a sample paragraph.";
+        document.parts.add(paragraph);
+
+        Footer footer = new Footer();
+        footer.text = "Page 1";
+        document.parts.add(footer);
+
+        Hyperlink hyperlink = new Hyperlink();
+        hyperlink.url = "https://example.com";
+        hyperlink.text = "Visit our website";
+        document.parts.add(hyperlink);
         
-        DocumentPart[] documentPartList = new DocumentPart[]{h, p, hyperlink, f};
-        WordDocument wordDocument = new WordDocument(documentPartList);
-        ConverterInterface htmlConverter = new HTMLConverter();
+        ConvertorInterface htmlimplementation=new HTMLConvertor();
         
-        wordDocument.convert(htmlConverter);
+
+        
+        document.open();
+        document.save();
+        document.convert(htmlimplementation);
     }
 }
