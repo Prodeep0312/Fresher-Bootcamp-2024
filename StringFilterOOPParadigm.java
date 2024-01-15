@@ -52,32 +52,13 @@ public class Main {
     }
 }*/
 
-
-class ConsoleDisplayController {
-
-	private List<String> context;
-
-	public void setContent(List<String> msg){
-	{
-		this.context=msg;
-
-	}
-
-	public void displayonTerminal(){
-
-		if (context == null) {
-    throw new NullPointerException("stringList must not be null");
-  }
-
-		for (String str : context) {
-           		 System.out.println(str);
-        }
-
-	
-
+interface SearchStrategy {
+    public boolean invoke(String item);
 }
 
-class StartsWithStratergy {
+
+
+class StartsWithStratergy implements SearchStrategy {
 	private String startsWithCriteria;
 
 	public void setStartsWith( String key){
@@ -92,13 +73,46 @@ class StartsWithStratergy {
 
 }
 
+class ConsoleDisplayController {
+
+	private List<String> context;
+
+	public void setContent(List<String> msg){
+	{
+		this.context=msg;
+
+	}
+	}
+
+	public void displayonTerminal(){
+
+		if (context == null) {
+    throw new NullPointerException("stringList must not be null");
+  }
+
+		for (String str : context) {
+           		 System.out.println(str);
+        }
+
+	
+
+}}
+
+
+
+
 class StringListFilterController{
+    
+     SearchStrategy predicate;
+    public StringListFilterController(SearchStrategy searchStrategyObj){
+        this.predicate = searchStrategyObj;
+    }
 
 StartsWithStratergy startsWithStratergy =new StartsWithStratergy();
 
-public List<string> filter( List<string> stringList){
+public List<String> filter( List<String> stringList){
 
-  ArrayList<String> filteredArray = new ArrayList<>();
+  List<String> filteredArray = new ArrayList<>();
         startsWithStratergy.setStartsWith("o");
         for(String word: stringList){
             if(startsWithStratergy.invoke(word)) filteredArray.add(word);
@@ -109,17 +123,19 @@ public List<string> filter( List<string> stringList){
  
 
 }
-
-public class Main {
-    public static void main(String[] args) {
+public  class Main{
+    public static void main (String[] args) {
         List<String> stringArray = List.of("apple", "banana", "orange", "avocado", "kiwi");
-        String startsWithCriteria = "o";
+        
+        
+        StartsWithStratergy Obj = new StartsWithStratergy();
+     Obj.setStartsWith("o");
 
-         StringListFilterController stringListFilterControllerObj = new StringListFilterController();
-      ArrayList<String> filteredArray = stringListFilterControllerObj.filter(stringArray);
+         StringListFilterController stringListFilterControllerObj = new StringListFilterController(Obj);
+     List<String> filteredArr = stringListFilterControllerObj.filter(stringArray);
       
       ConsoleDisplayController consoleDisplayControllerObj = new ConsoleDisplayController();
-      consoleDisplayControllerObj.setContent(filteredArray);
+      consoleDisplayControllerObj.setContent(filteredArr);
       consoleDisplayControllerObj.displayonTerminal();
     }
 }
