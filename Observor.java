@@ -58,38 +58,29 @@ class HelloWorld {
 
 import java.util.*;
 
-interface Iobservor{
-    void update(String state);
-}
-
-class Dashboard implements Iobservor{
-    String message;
-    public void update(String message){
-        this.message = message;
-        System.out.println("NOTIFICATION/n thread state  changed to : " + message);
-    }
-}
 class Thread {
     int id;
     String state;
     String priority;
     String culture;
     
-    ArrayList<Iobservor> observors;
+    ArrayList<Iobservor> x;
     
     
     
     
-    Thread(int id, String priority, String culture)
-    {
+    Thread(int id)
+    {   this.id=id;
+    this.priority="testing";
+    this.culture="testing";
         this.state="created";
         System.out.println(state);
-        observors = new ArrayList<>();
+        x = new ArrayList<>();
     }
     
      private void notifyObservors()
     {
-        for(Iobservor observor: observors){
+        for(Iobservor observor: x){
             observor.update(this.state);
         }
     }
@@ -133,26 +124,47 @@ class Thread {
     
     void subscribe(Iobservor iobserver)
     {
-        observors.add(iobserver);
+        x.add(iobserver);
     }
     
     void unsubscribe(Iobservor iobserver)
     {
-        observors.remove(iobserver);
+        x.remove(iobserver);
     }
     
    
     
 }
+
+interface Iobservor{
+    void update(String state);
+}
+
+class Dashboard implements Iobservor{
+    String content;
+    public void update(String content){
+        this.content = content;
+    }
+    
+    public String displayStatus(){
+        return this.content;
+    }
+}
+
 class HelloWorld {
     public static void main(String[] args) {
-        Thread th = new Thread(1, "high", "en-UK");
-      Iobservor dashboard = new Dashboard();
-      th.subscribe(dashboard);
+        Thread th = new Thread(1);
+        Iobservor dashboard = new Dashboard();
+        th.subscribe(dashboard);
+        
+        
         th.start();
         th.abort();
         th.sleep();
         th.waits();
         th.suspended();
+        
+        
+        th.unsubscribe(dashboard);
     }
 }
